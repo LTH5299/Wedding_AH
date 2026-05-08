@@ -89,17 +89,15 @@ img{max-width:100%;display:block}
 .env-side.right{ right:0; clip-path:polygon(100% 0, 0 50%, 100% 100%); box-shadow:inset 4px 0 10px rgba(0,0,0,.2); }
 .env-bottom{ position:absolute; bottom:0; left:0; right:0; height:50%; background: linear-gradient(180deg, var(--env-bg-dk) 0%, var(--env-shadow) 100%); clip-path:polygon(0 100%, 50% 0, 100% 100%); z-index:4; box-shadow:inset 0 -4px 10px rgba(0,0,0,.25); }
 
-/* LOẠI BỎ THUỘC TÍNH GÂY MỜ CHỮ TRÊN IOS */
 .env-letter{
   position:absolute; top:6%; left:6%; right:6%; bottom:6%;
   background:var(--bg-card); z-index:1; border:1px solid rgba(181,154,95,.4);
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  padding:14px; text-align:center; opacity:0; overflow: hidden;
-  transition: transform 1.2s cubic-bezier(.4,0,.2,1) .8s, opacity .6s ease 1.2s;
-  -webkit-font-smoothing: antialiased;
+  padding:14px; text-align:center; transition:transform 1.2s cubic-bezier(.4,0,.2,1) .8s, opacity .6s ease 1.2s;
+  box-shadow: inset 0 0 0 4px var(--bg-card), inset 0 0 0 5px rgba(181,154,95,.3); opacity:0;
+  overflow: hidden;
 }
-/* Chỉ dùng translateY, bỏ scale để tránh mờ chữ */
-.envelope.opened .env-letter{ transform:translateY(-110%); opacity:1; z-index:6; }
+.envelope.opened .env-letter{ transform:translateY(-110%) scale(1.0); opacity:1; z-index:6; }
 
 .env-flap{
   position:absolute; top:0; left:0; right:0; height:50%;
@@ -159,7 +157,7 @@ body.opened .nav{ opacity:1; pointer-events:auto; }
 @media(max-width:600px){ .nav{gap:12px;padding:10px 8px;flex-wrap:wrap;} .nav a{font-size:9.5px;letter-spacing:.15em; cursor:pointer;} }
 
 /* ═══════════════════════════════════
-   BỐ CỤC THIỆP CHÍNH
+   BỐ CỤC THIỆP CHÍNH (HOÀN TOÀN KHÔNG TRÀN VIỀN)
 ═══════════════════════════════════ */
 .app{ opacity:0; transition:opacity 1s ease 1.6s; }
 body.opened .app{ opacity:1; }
@@ -170,43 +168,46 @@ body.opened .app{ opacity:1; }
   min-height: 100vh; max-width: 1200px; margin: 0 auto;
 }
 
+/* THAY ĐỔI LỚN NHẤT: Bỏ height cố định, dùng padding để đẩy viền, tự động giãn theo text */
 .card {
   width: 100%; max-width: 500px; background: var(--bg-card);
-  position: relative; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.06);
-  display: flex; flex-direction: column; justify-content: center; align-items: center;
-  aspect-ratio: 4.8 / 6.8; 
+  position: relative; overflow: hidden; border-radius: 4px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.06);
 }
 
 .fl-jpeg { position: absolute; pointer-events: none; z-index: 1; mix-blend-mode: multiply; }
 .fl-png { position: absolute; pointer-events: none; z-index: 1; }
 
 .mask-top { -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%); mask-image: linear-gradient(to bottom, black 50%, transparent 100%); }
-.mask-tl { -webkit-mask-image: radial-gradient(circle at top left, black 50%, transparent 100%); mask-image: radial-gradient(circle at top left, black 50%, transparent 100%); }
+.mask-bl { -webkit-mask-image: radial-gradient(circle at bottom left, black 50%, transparent 100%); mask-image: radial-gradient(circle at bottom left, black 50%, transparent 100%); }
 .mask-br { -webkit-mask-image: radial-gradient(circle at bottom right, black 50%, transparent 100%); mask-image: radial-gradient(circle at bottom right, black 50%, transparent 100%); }
 
 /* Hoa phong bì */
 .fl-env-tl { width: 140px; top: -10px; left: -10px; opacity: 0.95; }
 .fl-env-br { width: 150px; bottom: -12px; right: -12px; opacity: 0.95; transform: scaleX(-1); }
 
-/* Hoa thẻ chính (Desktop) */
-.fl-hero-top { width: 100%; top: -5px; left: 0; } 
-.fl-hero-bl  { width: 220px; bottom: -20px; left: -20px; }
-.fl-inv-tl   { width: 200px; top: -12px; left: -12px; }
-.fl-inv-br   { width: 250px; bottom: -22px; right: -22px; transform: scaleX(-1); }
+/* Hoa thẻ chính (Nằm sát góc, không chạm chữ) */
+.fl-hero-top { width: 100%; top: 0; left: 0; } 
+.fl-hero-bl  { width: 220px; bottom: 0; left: 0; }
+.fl-inv-tl   { width: 180px; top: 0; left: 0; }
+.fl-inv-br   { width: 230px; bottom: 0; right: 0; transform: scaleX(-1); }
 
-/* Khung Lục Giác */
+/* KHUNG VIỀN CỐ ĐỊNH CÁCH MÉP 15px */
 .geometric-frame {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 86%; height: 90%; z-index: 2; pointer-events: none;
+  position: absolute; top: 15px; bottom: 15px; left: 15px; right: 15px;
+  width: calc(100% - 30px); height: calc(100% - 30px); z-index: 2; pointer-events: none;
 }
-.gold-border { position: absolute; inset: 20px; border: 1px solid var(--gold); z-index: 2; pointer-events: none; }
+.gold-border { 
+  position: absolute; inset: 15px; border: 1px solid var(--gold); z-index: 2; pointer-events: none; 
+}
 
+/* CONTENT BỌC KÍN CHỮ, CÁCH MÉP TRÊN/DƯỚI AN TOÀN */
 .content-wrapper {
-  position: relative; z-index: 10; text-align: center; width: 100%; padding: 30px; 
+  position: relative; z-index: 10; text-align: center; width: 100%; 
+  padding: 60px 30px; /* Đảm bảo chữ cách xa viền 15px */
+  display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100%;
 }
-.content-wrapper-env { position: relative; z-index: 10; padding: 10px; }
 
-/* CHỮ DESKTOP */
 .t-sub {
   font-family: var(--ff-body); font-size: 12px; font-weight: 700;
   color: var(--text-main); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px;
@@ -215,19 +216,17 @@ body.opened .app{ opacity:1; }
   font-family: var(--ff-body); font-size: 10px; font-weight: 600;
   color: var(--text-main); margin-bottom: 12px; letter-spacing: 2px; text-transform: uppercase;
 }
+
+/* THAY ĐỔI THỨ 2: CHỮ TÊN CÔ DÂU CHÚ RỂ NHỎ LẠI CHO SANG TRỌNG */
 .t-names {
-  font-family: var(--ff-script); font-size: clamp(36px, 7vw, 50px); 
+  font-family: var(--ff-script); font-size: 42px; 
   color: var(--text-dark); line-height: 1.1; margin: 2px 0; font-weight: 500;
 }
 .t-amp { font-family: var(--ff-display); font-size: 18px; color: var(--gold); font-weight: 700; margin: 2px 0; font-style: italic; }
 
-/* Kỹ thuật ngắt tên mượt mà trên Mobile */
-.m-break, .m-amp { display: none; }
-.d-amp { display: inline; }
-
 .family-row {
   display: flex; justify-content: space-between; align-items: flex-start;
-  margin: 15px 0; padding: 12px 0;
+  margin: 15px 0; padding: 12px 0; width: 100%;
   border-top: 1px solid rgba(181, 154, 95, 0.2); border-bottom: 1px solid rgba(181, 154, 95, 0.2);
 }
 .fam-col { flex: 1; }
@@ -248,7 +247,7 @@ body.opened .app{ opacity:1; }
 .map-btn:hover { background: var(--gold); color: var(--bg-card); }
 
 .t-save-row {
-  font-family: var(--ff-display); font-size: 24px; font-weight: 700; color: var(--text-dark); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 10px;
+  font-family: var(--ff-display); font-size: 24px; font-weight: 700; color: var(--text-dark); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 15px;
 }
 .t-save-row span {
   font-family: var(--ff-script); color: var(--gold); font-size: 40px; text-transform: lowercase; font-weight: 500; padding: 0 6px; letter-spacing: 0;
@@ -257,7 +256,7 @@ body.opened .app{ opacity:1; }
 .date-wrapper {
   border-top: 1px solid rgba(181, 154, 95, 0.3);
   border-bottom: 1px solid rgba(181, 154, 95, 0.3);
-  padding: 12px 0; margin: 15px auto; width: 85%; text-align: center;
+  padding: 12px 0; margin: 15px auto; width: 90%; text-align: center;
 }
 .solar-row { display: flex; align-items: center; justify-content: center; gap: 15px; }
 .solar-row .month, .solar-row .year { font-size: 11px; letter-spacing: 3px; font-weight: 700; color: var(--text-main); text-transform: uppercase; }
@@ -270,7 +269,7 @@ body.opened .app{ opacity:1; }
 .bottom-wrapper {
   position: relative; width: 100%; max-width: 900px;
   margin: 0 auto 30px; 
-  padding: 40px; background: transparent; overflow: hidden; 
+  padding: 60px 40px; background: transparent; overflow: hidden; 
 }
 
 .bg-frame-floral {
@@ -286,7 +285,6 @@ body.opened .app{ opacity:1; }
   display: flex; flex-direction: column; gap: 40px; 
 }
 .interactive-section { text-align: center; max-width: 600px; margin: 0 auto; width: 100%; }
-
 .sec-title { 
   font-family: var(--ff-display); font-size: 22px; font-weight: 800; 
   color: var(--text-dark); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px;
@@ -339,62 +337,55 @@ body.opened .app{ opacity:1; }
 .ty-sub { font-family: var(--ff-body); font-size: 18px; color: var(--text-main); line-height: 1.8; letter-spacing: 1px; }
 
 /* ═══════════════════════════════════
-   TỐI ƯU HÓA MOBILE (GIẢI QUYẾT TOÀN BỘ LỖI)
+   TỐI ƯU HÓA MOBILE (KHẮC PHỤC TRIỆT ĐỂ)
 ═══════════════════════════════════ */
 @media(max-width:768px){
-  /* 1. Kéo giãn không gian thiệp để chữ có chỗ thở */
-  .hero-spread { flex-direction: column; padding: 20px 15px; min-height: auto; gap: 20px; }
-  .card { aspect-ratio: auto; min-height: auto; padding: 35px 0; }
-  .geometric-frame { width: 96%; height: 98%; } /* Mở rộng tối đa viền lục giác */
-  .content-wrapper { padding: 15px 10px; } 
+  .hero-spread { flex-direction: column; padding: 15px 10px; gap: 20px; }
+  
+  /* CÓ ĐỘ ĐỆM ĐỦ LỚN ĐỂ NỘI DUNG VÀ VIỀN VÀNG KHÔNG BAO GIỜ CHẠM NHAU */
+  .content-wrapper { padding: 45px 20px; } 
 
-  /* 2. ÉP TÊN, TIÊU ĐỀ NHỎ LẠI ĐỂ SANG TRỌNG HƠN */
-  .t-names { font-size: 32px !important; }
-  .t-amp { font-size: 14px; margin: 0; }
+  /* ÉP TÊN, TIÊU ĐỀ NHỎ LẠI CHO SANG TRỌNG */
+  .t-names { font-size: 34px !important; }
+  .t-amp { font-size: 14px; margin: 2px 0; }
   .t-sub { font-size: 10px; letter-spacing: 1.5px; margin-bottom: 4px; }
-  .t-sub-small { font-size: 8.5px; letter-spacing: 1px; margin-bottom: 8px; }
 
-  /* NGẮT DÒNG TÊN CÔ DÂU CHÚ RỂ MƯỢT MÀ */
-  .d-amp { display: none; }
-  .m-break, .m-amp { display: inline; }
-  .m-break { display: block; margin-top: 5px; }
+  /* TÊN CÔ DÂU CHÚ RỂ XUỐNG DÒNG MƯỢT MÀ TRONG THIỆP 1 */
+  .name-block { display: block; margin-top: 4px; }
+  .amp-block { font-size: 10px; color: var(--gold); }
 
-  /* 3. THU NHỎ & ĐẨY HOA RA TẬN CÙNG CÁC GÓC ĐỂ KHÔNG CHẠM CHỮ */
-  .fl-hero-top { width: 100%; top: -5px; opacity: 0.8; }
-  .fl-hero-bl  { width: 90px; bottom: -5px; left: -5px; opacity: 0.6; } /* Thu nhỏ & Làm mờ */
-  .fl-inv-tl   { width: 70px; top: 0px; left: 0px; opacity: 0.6; } 
-  .fl-inv-br   { width: 95px; bottom: 0px; right: 0px; opacity: 0.6; }
+  /* THU NHỎ HOA Ở GÓC, KHÔNG CHO CHẠM CHỮ NHÀ TRAI NHÀ GÁI */
+  .fl-hero-top { width: 100%; top: 0; }
+  .fl-hero-bl  { width: 110px; bottom: 0; left: 0; opacity: 0.6; } 
+  .fl-inv-tl   { width: 85px; top: 0; left: 0; opacity: 0.6; } 
+  .fl-inv-br   { width: 120px; bottom: 0; right: 0; opacity: 0.6; }
 
-  /* 4. CHỈNH CHỮ TRONG PHONG BÌ */
-  .env-letter { padding: 8px; }
-  .content-wrapper-env > div:nth-child(1) { font-size: 12px !important; letter-spacing: 2px !important; margin-bottom: 8px !important; }
-  .content-wrapper-env > div:nth-child(1) span { font-size: 20px !important; }
-  .content-wrapper-env > div:nth-child(2) { font-size: 28px !important; margin-top: 4px; }
-  .content-wrapper-env > div:nth-child(2) span { font-size: 16px !important; }
-  .content-wrapper-env > div:nth-child(3) { font-size: 10px !important; margin-top: 10px !important; padding-top: 8px !important; letter-spacing: 3px !important; }
+  /* XẾP TÊN TRONG PHONG BÌ CÂN ĐỐI, CHỮNG DÒNG (FIX ẢNH 1) */
+  .env-letter { padding: 10px; }
+  .content-wrapper-env { display: flex; flex-direction: column; justify-content: center; height: 100%; }
 
-  /* 5. KHẮC PHỤC CHỮ TRÀN CỦA NHÀ TRAI & NHÀ GÁI */
-  .fam-name { font-size: 10.5px; line-height: 1.5; } /* Giảm cỡ chữ để dòng gọn gàng */
+  /* KHẮC PHỤC CHỮ TÊN PHỤ HUYNH TRÀN DÒNG */
+  .fam-name { font-size: 11.5px; line-height: 1.4; } 
   .fam-title { font-size: 8px; letter-spacing: 1.5px; margin-bottom: 2px;}
-  .family-row { margin: 10px 0; padding: 5px 0; }
+  .family-row { margin: 10px 0; padding: 8px 0; }
   .fam-line { height: 25px; margin: 0 5px; }
   
-  /* 6. NGÀY THÁNG, ĐỊA CHỈ GỌN GÀNG */
+  /* NGÀY THÁNG GỌN GÀNG */
   .t-save-row { font-size: 18px; margin-bottom: 5px; letter-spacing: 2px;}
-  .t-save-row span { font-size: 28px; padding: 0 4px; }
-  
-  .date-wrapper { width: 95%; margin: 10px auto; padding: 10px 0; }
-  .solar-row { gap: 10px; }
-  .solar-row .month, .solar-row .year { font-size: 8px; letter-spacing: 1.5px; }
+  .t-save-row span { font-size: 32px; padding: 0 4px; }
+  .date-wrapper { width: 100%; margin: 12px auto; padding: 10px 0; }
+  .solar-row { gap: 8px; }
+  .solar-row .month, .solar-row .year { font-size: 8.5px; letter-spacing: 1.5px; }
   .solar-row .day { font-size: 26px; }
   .lunar-row { font-size: 10px; margin-top: 6px; letter-spacing: 1px; }
   
-  .t-address { font-size: 10px; line-height: 1.6; padding: 0 5px; } /* Phông nhỏ lại, ngắt dòng chuẩn */
+  /* ĐỊA CHỈ: Nhỏ lại và ngắt dòng chuẩn */
+  .t-address { font-size: 10px; line-height: 1.6; padding: 0 5px; } 
   .t-place { font-size: 12px; letter-spacing: 1px; margin-bottom: 4px; }
-  .t-time { font-size: 9.5px; margin-bottom: 8px; }
+  .t-time { font-size: 10px; margin-bottom: 8px; }
 
-  /* CÁC PHẦN BÊN DƯỚI */
-  .bottom-wrapper { padding: 40px 15px; margin-top: 0; }
+  /* Các phần bên dưới */
+  .bottom-wrapper { padding: 30px 15px; }
   .interactive-container { gap: 30px; }
   .sec-title { font-size: 18px; letter-spacing: 2px; margin-bottom: 15px; }
   
@@ -406,7 +397,7 @@ body.opened .app{ opacity:1; }
   .thank-you-section { padding: 50px 15px 80px; }
   .ty-text { font-size: 38px; margin-bottom: 10px; }
   .ty-sub { font-size: 13px; line-height: 1.6; }
-  .thank-you-section div:last-child { font-size: 28px !important; margin-top: 20px !important; }
+  .thank-you-section div:last-child { font-size: 26px !important; margin-top: 20px !important; }
 }
 
 .reveal{ opacity:0; transform:translateY(25px); transition:all 1s cubic-bezier(.22,1,.36,1); }
@@ -428,16 +419,19 @@ body.opened .app{ opacity:1; }
   <div class="envelope" id="envelope">
     <div class="env-back"></div>
     <div class="env-letter">
-      <img src="8.png" class="fl-png fl-env-tl mask-tl" alt="hoa">
-      <img src="8.png" class="fl-png fl-env-br mask-br" alt="hoa">
+      <img src="8.png" class="fl-png fl-env-tl" alt="hoa" style="width: 110px; top: -5px; left: -5px; opacity: 0.9;">
+      <img src="8.png" class="fl-png fl-env-br" alt="hoa" style="width: 120px; bottom: -5px; right: -5px; opacity: 0.9; transform: scaleX(-1);">
       <div class="content-wrapper-env">
-        <div style="font-family: var(--ff-display); font-size: 14px; font-weight: 700; letter-spacing: 3px; color: var(--text-dark); margin-bottom: 10px; text-transform: uppercase;">
-          SAVE <span style="font-family: var(--ff-script); color: var(--gold); font-size: 24px; font-weight: 500; text-transform: lowercase; padding: 0 4px; letter-spacing: 0;">the</span> DATE
+        <div style="font-family: var(--ff-display); font-size: 14px; font-weight: 700; letter-spacing: 3px; color: var(--text-dark); margin-bottom: 12px; text-transform: uppercase;">
+          SAVE <span style="font-family: var(--ff-script); color: var(--gold); font-size: 22px; font-weight: 500; text-transform: lowercase; padding: 0 4px; letter-spacing: 0;">the</span> DATE
         </div>
-        <div style="font-family: var(--ff-script); font-size: 34px; color: var(--text-dark); line-height: 1; font-weight: 500;">
-          Tuấn Anh <span style="font-size: 18px; color: var(--gold); font-family: var(--ff-display); font-weight: 700;">&amp;</span> Thanh Huyền
+        <!-- ÉP TÊN XUỐNG DÒNG CÂN ĐỐI TRONG PHONG BÌ -->
+        <div style="font-family: var(--ff-script); font-size: 34px; color: var(--text-dark); line-height: 1.1; font-weight: 500; text-align: center;">
+          Tuấn Anh <br>
+          <span style="font-size: 16px; color: var(--gold); font-family: var(--ff-display); font-weight: 700; margin: 4px 0; display: inline-block;">&amp;</span><br>
+          Thanh Huyền
         </div>
-        <div style="margin-top: 15px; font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--text-main); font-weight: 700; border-top: 1px solid rgba(181, 154, 95, 0.2); padding-top: 10px; display: inline-block;">26 · 05 · 2026</div>
+        <div style="margin-top: 15px; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--text-main); font-weight: 700; border-top: 1px solid rgba(181, 154, 95, 0.2); padding-top: 10px; display: inline-block;">26 · 05 · 2026</div>
       </div>
     </div>
     <div class="env-side left"></div>
@@ -464,7 +458,6 @@ body.opened .app{ opacity:1; }
   <section class="hero-spread">
     <!-- TRANG 1: SAVE THE DATE -->
     <div class="card reveal" id="hero">
-      <!-- Khung lục giác vát siêu nông để chữ có chỗ trên điện thoại -->
       <svg class="geometric-frame" viewBox="0 0 100 115" preserveAspectRatio="none">
         <polygon points="50,4 96,18 96,97 50,111 4,97 4,18" fill="none" stroke="#C0A467" stroke-width="0.6"/>
       </svg>
@@ -476,10 +469,11 @@ body.opened .app{ opacity:1; }
         <div class="t-sub" style="margin-top: 25px;">The Wedding Of</div>
         <div class="t-save-row">SAVE <span>the</span> DATE</div>
         
-        <!-- Khắc phục tên dài: Ngắt dòng tự động trên Mobile -->
-        <div class="t-sub-small full-name" style="letter-spacing: 1.5px; font-weight: 700;">
-          Lê Tuấn Anh <span class="d-amp">&amp;</span><br class="m-break">
-          <span class="m-amp">&amp;</span> Nguyễn T. Thanh Huyền
+        <!-- Ép xuống dòng chuẩn chỉnh cho tên phụ -->
+        <div class="t-sub-small" style="letter-spacing: 1.5px; font-size: 12px; font-weight: 700; line-height: 1.6;">
+          LÊ TUẤN ANH <br>
+          <span class="amp-block">&amp;</span><br>
+          <span class="name-block">NGUYỄN T. THANH HUYỀN</span>
         </div>
         
         <div class="date-wrapper">
@@ -505,7 +499,7 @@ body.opened .app{ opacity:1; }
       
       <div class="content-wrapper">
         <div class="t-sub">Trân trọng kính mời<br>tới dự tiệc cưới</div>
-        <div class="t-sub-small" style="margin-bottom: 10px;">Của hai con chúng tôi</div>
+        <div class="t-sub-small" style="margin-bottom: 15px;">Của hai con chúng tôi</div>
         <div class="t-names">Tuấn Anh</div>
         <div class="t-amp">&</div>
         <div class="t-names">Thanh Huyền</div>
