@@ -89,18 +89,16 @@ img{max-width:100%;display:block}
 .env-side.right{ right:0; clip-path:polygon(100% 0, 0 50%, 100% 100%); box-shadow:inset 4px 0 10px rgba(0,0,0,.2); }
 .env-bottom{ position:absolute; bottom:0; left:0; right:0; height:50%; background: linear-gradient(180deg, var(--env-bg-dk) 0%, var(--env-shadow) 100%); clip-path:polygon(0 100%, 50% 0, 100% 100%); z-index:4; box-shadow:inset 0 -4px 10px rgba(0,0,0,.25); }
 
+/* LOẠI BỎ THUỘC TÍNH GÂY MỜ CHỮ TRÊN IOS */
 .env-letter{
   position:absolute; top:6%; left:6%; right:6%; bottom:6%;
   background:var(--bg-card); z-index:1; border:1px solid rgba(181,154,95,.4);
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  padding:14px; text-align:center; transition:transform 1.2s cubic-bezier(.4,0,.2,1) .8s, opacity .6s ease 1.2s;
-  box-shadow: inset 0 0 0 4px var(--bg-card), inset 0 0 0 5px rgba(181,154,95,.3); opacity:0;
-  overflow: hidden;
-  /* ÉP PHẦN CỨNG ĐỂ CHỮ KHÔNG BỊ MỜ TRÊN ĐIỆN THOẠI KHI ANIMATION */
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  will-change: transform, opacity;
+  padding:14px; text-align:center; opacity:0; overflow: hidden;
+  transition: transform 1.2s cubic-bezier(.4,0,.2,1) .8s, opacity .6s ease 1.2s;
+  -webkit-font-smoothing: antialiased;
 }
+/* Chỉ dùng translateY, bỏ scale để tránh mờ chữ */
 .envelope.opened .env-letter{ transform:translateY(-110%); opacity:1; z-index:6; }
 
 .env-flap{
@@ -206,8 +204,9 @@ body.opened .app{ opacity:1; }
 .content-wrapper {
   position: relative; z-index: 10; text-align: center; width: 100%; padding: 30px; 
 }
+.content-wrapper-env { position: relative; z-index: 10; padding: 10px; }
 
-/* TYPOGRAPHY DESKTOP */
+/* CHỮ DESKTOP */
 .t-sub {
   font-family: var(--ff-body); font-size: 12px; font-weight: 700;
   color: var(--text-main); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px;
@@ -221,6 +220,10 @@ body.opened .app{ opacity:1; }
   color: var(--text-dark); line-height: 1.1; margin: 2px 0; font-weight: 500;
 }
 .t-amp { font-family: var(--ff-display); font-size: 18px; color: var(--gold); font-weight: 700; margin: 2px 0; font-style: italic; }
+
+/* Kỹ thuật ngắt tên mượt mà trên Mobile */
+.m-break, .m-amp { display: none; }
+.d-amp { display: inline; }
 
 .family-row {
   display: flex; justify-content: space-between; align-items: flex-start;
@@ -245,13 +248,12 @@ body.opened .app{ opacity:1; }
 .map-btn:hover { background: var(--gold); color: var(--bg-card); }
 
 .t-save-row {
-  font-family: var(--ff-display); font-size: 24px; font-weight: 700; color: var(--text-dark); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 15px;
+  font-family: var(--ff-display); font-size: 24px; font-weight: 700; color: var(--text-dark); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 10px;
 }
 .t-save-row span {
   font-family: var(--ff-script); color: var(--gold); font-size: 40px; text-transform: lowercase; font-weight: 500; padding: 0 6px; letter-spacing: 0;
 }
 
-/* Cụm Ngày Tháng */
 .date-wrapper {
   border-top: 1px solid rgba(181, 154, 95, 0.3);
   border-bottom: 1px solid rgba(181, 154, 95, 0.3);
@@ -283,7 +285,6 @@ body.opened .app{ opacity:1; }
   position: relative; z-index: 5;
   display: flex; flex-direction: column; gap: 40px; 
 }
-
 .interactive-section { text-align: center; max-width: 600px; margin: 0 auto; width: 100%; }
 
 .sec-title { 
@@ -335,69 +336,72 @@ body.opened .app{ opacity:1; }
 }
 .ty-content { max-width: 700px; margin: 0 auto; position: relative; z-index: 5; }
 .ty-text { font-family: var(--ff-script); font-size: 58px; color: var(--gold); margin-bottom: 20px; font-weight: 500; }
-.ty-sub { font-family: var(--ff-body); font-size: 16px; color: var(--text-main); line-height: 1.8; letter-spacing: 1px; }
+.ty-sub { font-family: var(--ff-body); font-size: 18px; color: var(--text-main); line-height: 1.8; letter-spacing: 1px; }
 
 /* ═══════════════════════════════════
-   TỐI ƯU HÓA MOBILE SIÊU CHUẨN (KHẮC PHỤC MỌI LỖI)
+   TỐI ƯU HÓA MOBILE (GIẢI QUYẾT TOÀN BỘ LỖI)
 ═══════════════════════════════════ */
 @media(max-width:768px){
-  /* Ép toàn bộ khung nhỏ lại, bớt lề trống */
-  .hero-spread { flex-direction: column; padding: 15px 10px; min-height: auto; gap: 15px; }
-  .card { aspect-ratio: auto; min-height: auto; padding: 30px 0; }
-  .geometric-frame { width: 92%; height: 95%; }
-  .content-wrapper { padding: 20px 12px; } 
+  /* 1. Kéo giãn không gian thiệp để chữ có chỗ thở */
+  .hero-spread { flex-direction: column; padding: 20px 15px; min-height: auto; gap: 20px; }
+  .card { aspect-ratio: auto; min-height: auto; padding: 35px 0; }
+  .geometric-frame { width: 96%; height: 98%; } /* Mở rộng tối đa viền lục giác */
+  .content-wrapper { padding: 15px 10px; } 
 
-  /* ÉP TÊN CÔ DÂU CHÚ RỂ NHỎ LẠI ĐỂ KHÔNG CHƯỚNG MẮT */
-  .t-names { font-size: 30px !important; }
-  .t-amp { font-size: 16px; margin: 0; }
+  /* 2. ÉP TÊN, TIÊU ĐỀ NHỎ LẠI ĐỂ SANG TRỌNG HƠN */
+  .t-names { font-size: 32px !important; }
+  .t-amp { font-size: 14px; margin: 0; }
+  .t-sub { font-size: 10px; letter-spacing: 1.5px; margin-bottom: 4px; }
+  .t-sub-small { font-size: 8.5px; letter-spacing: 1px; margin-bottom: 8px; }
 
-  /* Ép tiêu đề phụ */
-  .t-sub { font-size: 11px; letter-spacing: 2px; margin-bottom: 4px; }
-  .t-sub-small { font-size: 9px; letter-spacing: 1.5px; margin-bottom: 8px; }
+  /* NGẮT DÒNG TÊN CÔ DÂU CHÚ RỂ MƯỢT MÀ */
+  .d-amp { display: none; }
+  .m-break, .m-amp { display: inline; }
+  .m-break { display: block; margin-top: 5px; }
 
-  /* ÉP HOA THU NHỎ LẠI & SÁT MÉP ĐỂ TRÁNH ĐÈ CHỮ */
-  .fl-hero-top { width: 100%; top: -5px; }
-  .fl-hero-bl  { width: 100px; bottom: -5px; left: -5px; }
-  .fl-inv-tl   { width: 80px; top: -5px; left: -5px; opacity: 0.8; } 
-  .fl-inv-br   { width: 110px; bottom: -5px; right: -5px; }
+  /* 3. THU NHỎ & ĐẨY HOA RA TẬN CÙNG CÁC GÓC ĐỂ KHÔNG CHẠM CHỮ */
+  .fl-hero-top { width: 100%; top: -5px; opacity: 0.8; }
+  .fl-hero-bl  { width: 90px; bottom: -5px; left: -5px; opacity: 0.6; } /* Thu nhỏ & Làm mờ */
+  .fl-inv-tl   { width: 70px; top: 0px; left: 0px; opacity: 0.6; } 
+  .fl-inv-br   { width: 95px; bottom: 0px; right: 0px; opacity: 0.6; }
 
-  /* Bố cục thư phong bì lúc mở (ÉP NHỎ + CHỮNG LẠI ĐỂ KHÔNG MỜ) */
-  .env-letter { padding: 10px; }
+  /* 4. CHỈNH CHỮ TRONG PHONG BÌ */
+  .env-letter { padding: 8px; }
   .content-wrapper-env > div:nth-child(1) { font-size: 12px !important; letter-spacing: 2px !important; margin-bottom: 8px !important; }
   .content-wrapper-env > div:nth-child(1) span { font-size: 20px !important; }
-  .content-wrapper-env > div:nth-child(2) { font-size: 26px !important; margin-top: 4px; }
-  .content-wrapper-env > div:nth-child(2) span { font-size: 14px !important; }
+  .content-wrapper-env > div:nth-child(2) { font-size: 28px !important; margin-top: 4px; }
+  .content-wrapper-env > div:nth-child(2) span { font-size: 16px !important; }
   .content-wrapper-env > div:nth-child(3) { font-size: 10px !important; margin-top: 10px !important; padding-top: 8px !important; letter-spacing: 3px !important; }
 
-  /* Family Row (Tránh rớt chữ tên phụ huynh) */
-  .fam-name { font-size: 11px; line-height: 1.4; } 
-  .fam-title { font-size: 8px; letter-spacing: 2px; margin-bottom: 2px;}
-  .family-row { margin: 8px 0; padding: 8px 0; }
+  /* 5. KHẮC PHỤC CHỮ TRÀN CỦA NHÀ TRAI & NHÀ GÁI */
+  .fam-name { font-size: 10.5px; line-height: 1.5; } /* Giảm cỡ chữ để dòng gọn gàng */
+  .fam-title { font-size: 8px; letter-spacing: 1.5px; margin-bottom: 2px;}
+  .family-row { margin: 10px 0; padding: 5px 0; }
+  .fam-line { height: 25px; margin: 0 5px; }
   
-  /* Các chi tiết khác */
-  .t-save-row { font-size: 18px; margin-bottom: 5px; letter-spacing: 3px;}
+  /* 6. NGÀY THÁNG, ĐỊA CHỈ GỌN GÀNG */
+  .t-save-row { font-size: 18px; margin-bottom: 5px; letter-spacing: 2px;}
   .t-save-row span { font-size: 28px; padding: 0 4px; }
   
-  .date-wrapper { width: 100%; margin: 10px auto; padding: 10px 0; }
+  .date-wrapper { width: 95%; margin: 10px auto; padding: 10px 0; }
   .solar-row { gap: 10px; }
-  .solar-row .month, .solar-row .year { font-size: 9px; letter-spacing: 2px; }
+  .solar-row .month, .solar-row .year { font-size: 8px; letter-spacing: 1.5px; }
   .solar-row .day { font-size: 26px; }
   .lunar-row { font-size: 10px; margin-top: 6px; letter-spacing: 1px; }
   
-  /* ĐỊA CHỈ: Nhỏ lại và ngắt dòng chuẩn */
-  .t-address { font-size: 10px; line-height: 1.6; padding: 0 5px; }
+  .t-address { font-size: 10px; line-height: 1.6; padding: 0 5px; } /* Phông nhỏ lại, ngắt dòng chuẩn */
   .t-place { font-size: 12px; letter-spacing: 1px; margin-bottom: 4px; }
-  .t-time { font-size: 10px; margin-bottom: 8px; }
+  .t-time { font-size: 9.5px; margin-bottom: 8px; }
 
-  /* Phần dưới */
-  .bottom-wrapper { padding: 30px 10px; margin-top: 0; }
+  /* CÁC PHẦN BÊN DƯỚI */
+  .bottom-wrapper { padding: 40px 15px; margin-top: 0; }
   .interactive-container { gap: 30px; }
-  .sec-title { font-size: 20px; letter-spacing: 2px; margin-bottom: 15px; }
+  .sec-title { font-size: 18px; letter-spacing: 2px; margin-bottom: 15px; }
   
-  .cd-grid { gap: 8px; }
+  .cd-grid { gap: 6px; }
   .cd-box { padding: 15px 2px; }
   .cd-num { font-size: 24px; margin-bottom: 4px; }
-  .cd-lbl { font-size: 9px; }
+  .cd-lbl { font-size: 8px; }
 
   .thank-you-section { padding: 50px 15px 80px; }
   .ty-text { font-size: 38px; margin-bottom: 10px; }
@@ -460,6 +464,7 @@ body.opened .app{ opacity:1; }
   <section class="hero-spread">
     <!-- TRANG 1: SAVE THE DATE -->
     <div class="card reveal" id="hero">
+      <!-- Khung lục giác vát siêu nông để chữ có chỗ trên điện thoại -->
       <svg class="geometric-frame" viewBox="0 0 100 115" preserveAspectRatio="none">
         <polygon points="50,4 96,18 96,97 50,111 4,97 4,18" fill="none" stroke="#C0A467" stroke-width="0.6"/>
       </svg>
@@ -470,7 +475,12 @@ body.opened .app{ opacity:1; }
       <div class="content-wrapper">
         <div class="t-sub" style="margin-top: 25px;">The Wedding Of</div>
         <div class="t-save-row">SAVE <span>the</span> DATE</div>
-        <div class="t-sub-small" style="letter-spacing: 2px; font-size: 13px; font-weight: 700;">Lê Tuấn Anh & Nguyễn T. Thanh Huyền</div>
+        
+        <!-- Khắc phục tên dài: Ngắt dòng tự động trên Mobile -->
+        <div class="t-sub-small full-name" style="letter-spacing: 1.5px; font-weight: 700;">
+          Lê Tuấn Anh <span class="d-amp">&amp;</span><br class="m-break">
+          <span class="m-amp">&amp;</span> Nguyễn T. Thanh Huyền
+        </div>
         
         <div class="date-wrapper">
           <div class="solar-row">
@@ -495,7 +505,7 @@ body.opened .app{ opacity:1; }
       
       <div class="content-wrapper">
         <div class="t-sub">Trân trọng kính mời<br>tới dự tiệc cưới</div>
-        <div class="t-sub-small" style="margin-bottom: 15px;">Của hai con chúng tôi</div>
+        <div class="t-sub-small" style="margin-bottom: 10px;">Của hai con chúng tôi</div>
         <div class="t-names">Tuấn Anh</div>
         <div class="t-amp">&</div>
         <div class="t-names">Thanh Huyền</div>
