@@ -189,7 +189,7 @@ body.opened .app{ opacity:1; }
 /* Hoa thẻ chính (Nằm sát góc, không chạm chữ) */
 .fl-hero-top { width: 100%; top: 0; left: 0; } 
 .fl-hero-bl  { width: 220px; bottom: 0; left: 0; }
-.fl-inv-tl   { width: 180px; top: 0; left: 0; }
+.fl-inv-tl   { width: 140px; top: 0; left: 0; opacity: 0.7; }
 .fl-inv-br   { width: 230px; bottom: 0; right: 0; transform: scaleX(-1); }
 
 /* KHUNG VIỀN CỐ ĐỊNH CÁCH MÉP 15px */
@@ -228,6 +228,7 @@ body.opened .app{ opacity:1; }
   display: flex; justify-content: space-between; align-items: flex-start;
   margin: 15px 0; padding: 12px 0; width: 100%;
   border-top: 1px solid rgba(181, 154, 95, 0.2); border-bottom: 1px solid rgba(181, 154, 95, 0.2);
+  position: relative; z-index: 12;
 }
 .fam-col { flex: 1; }
 .fam-line { width: 1px; height: 30px; background: rgba(181, 154, 95, 0.3); margin: 0 8px; align-self: center;}
@@ -340,68 +341,47 @@ body.opened .app{ opacity:1; }
    TỐI ƯU HÓA MOBILE (KHẮC PHỤC TRIỆT ĐỂ LỖI ĐÈ CHỮ)
 ═══════════════════════════════════ */
 @media(max-width:768px){
-  .hero-spread { flex-direction: column; padding: 15px 10px; gap: 20px; }
-  
-  /* Xóa padding card để sử dụng padding của content-wrapper đẩy hoa */
-  .card { aspect-ratio: auto; min-height: auto; padding: 0; }
-  .geometric-frame { width: 92%; height: 96%; }
-
-  /* BẢO VỆ CHỮ: Bơm padding trên/dưới cực lớn để hoa tuyệt đối không chạm vào text */
-  .content-wrapper { padding: 65px 15px 85px; } 
-
-  /* ÉP TÊN, TIÊU ĐỀ NHỎ LẠI CHO SANG TRỌNG */
-  .t-names { font-size: 34px !important; }
-  .t-amp { font-size: 14px; margin: 2px 0; }
-  .t-sub { font-size: 10px; letter-spacing: 1.5px; margin-bottom: 4px; }
-
-  /* TÊN CÔ DÂU CHÚ RỂ XUỐNG DÒNG MƯỢT MÀ TRONG THIỆP 1 */
-  .name-block { display: block; margin-top: 4px; }
-  .amp-block { font-size: 10px; color: var(--gold); }
-
-  /* THU NHỎ VÀ LÀM MỜ HOA Ở GÓC, TRÁNH ÁT CHỮ */
-  .fl-hero-top { width: 100%; top: 0; opacity: 0.6; }
-  .fl-hero-bl  { width: 120px; bottom: 0; left: 0; opacity: 0.5; } 
-  .fl-inv-tl   { width: 95px; top: 0; left: 0; opacity: 0.5; } 
-  .fl-inv-br   { width: 130px; bottom: 0; right: 0; opacity: 0.5; }
-
-  /* XẾP TÊN TRONG PHONG BÌ CÂN ĐỐI */
-  .env-letter { padding: 10px; }
-  .content-wrapper-env { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; }
-
-  /* KHẮC PHỤC CHỮ TÊN PHỤ HUYNH TRÀN DÒNG */
-  .fam-name { font-size: 11.5px; line-height: 1.4; } 
-  .fam-title { font-size: 8px; letter-spacing: 1.5px; margin-bottom: 2px;}
-  .family-row { margin: 10px 0; padding: 8px 0; }
-  .fam-line { height: 25px; margin: 0 5px; }
-  
-  /* NGÀY THÁNG GỌN GÀNG */
-  .t-save-row { font-size: 18px; margin-bottom: 5px; letter-spacing: 2px;}
-  .t-save-row span { font-size: 32px; padding: 0 4px; }
-  .date-wrapper { width: 100%; margin: 12px auto; padding: 10px 0; }
-  .solar-row { gap: 8px; }
-  .solar-row .month, .solar-row .year { font-size: 8.5px; letter-spacing: 1.5px; }
-  .solar-row .day { font-size: 26px; }
-  .lunar-row { font-size: 10px; margin-top: 6px; letter-spacing: 1px; }
-  
-  /* ĐỊA CHỈ: Nhỏ lại và ngắt dòng chuẩn */
-  .t-address { font-size: 10px; line-height: 1.6; padding: 0 5px; } 
-  .t-place { font-size: 12px; letter-spacing: 1px; margin-bottom: 4px; }
-  .t-time { font-size: 10px; margin-bottom: 8px; }
-
-  /* Các phần bên dưới */
-  .bottom-wrapper { padding: 30px 15px; }
-  .interactive-container { gap: 30px; }
-  .sec-title { font-size: 18px; letter-spacing: 2px; margin-bottom: 15px; }
-  
-  .cd-grid { gap: 6px; }
-  .cd-box { padding: 15px 2px; }
-  .cd-num { font-size: 24px; margin-bottom: 4px; }
-  .cd-lbl { font-size: 8px; }
-
-  .thank-you-section { padding: 50px 15px 80px; }
-  .ty-text { font-size: 38px; margin-bottom: 10px; }
-  .ty-sub { font-size: 13px; line-height: 1.6; }
-  .thank-you-section div:last-child { font-size: 26px !important; margin-top: 20px !important; }
+  .hero-spread { flex-direction:column; padding:50px 12px 16px; gap:16px; min-height:auto; }
+  .card { aspect-ratio:auto; min-height:auto; padding:0; }
+  .geometric-frame { width:94%; height:97%; }
+  .content-wrapper { padding:80px 20px 90px; }
+  .t-names { font-size:36px !important; line-height:1.05; }
+  .t-amp { font-size:14px; margin:1px 0; }
+  .t-sub { font-size:10px; letter-spacing:1.5px; margin-bottom:4px; }
+  .t-sub-small { font-size:10px; letter-spacing:1px; }
+  .fl-hero-top { width:100%; top:0; opacity:0.65; }
+  .fl-hero-bl  { width:110px; bottom:0; left:0; opacity:0.45; }
+  .fl-inv-tl   { width:85px; top:0; left:0; opacity:0.4; }
+  .fl-inv-br   { width:120px; bottom:0; right:0; opacity:0.45; }
+  .family-row { margin:10px 0; padding:8px 0; position:relative; z-index:12; }
+  .fam-col { min-width:0; }
+  .fam-name { font-size:11px; line-height:1.35; }
+  .fam-title { font-size:8px; letter-spacing:1.5px; margin-bottom:2px; }
+  .fam-line { height:24px; margin:0 6px; flex-shrink:0; }
+  .t-save-row { font-size:18px; margin-bottom:6px; letter-spacing:2px; white-space:nowrap; }
+  .t-save-row span { font-size:30px; padding:0 3px; }
+  .date-wrapper { width:95%; margin:10px auto; padding:10px 0; }
+  .solar-row { gap:8px; }
+  .solar-row .month, .solar-row .year { font-size:9px; letter-spacing:1px; }
+  .solar-row .day { font-size:28px; }
+  .lunar-row { font-size:10px; margin-top:6px; letter-spacing:0.5px; }
+  .t-address { font-size:10.5px; line-height:1.65; padding:0 4px; }
+  .t-place { font-size:12px; letter-spacing:1px; margin-bottom:4px; }
+  .t-time { font-size:9.5px; margin-bottom:8px; letter-spacing:0.5px; }
+  .map-btn { margin-top:14px; padding:8px 18px; font-size:9px; cursor:pointer; }
+  .bottom-wrapper { padding:30px 12px; }
+  .interactive-container { gap:28px; }
+  .sec-title { font-size:18px; letter-spacing:2px; margin-bottom:14px; }
+  .cd-grid { gap:6px; }
+  .cd-box { padding:14px 2px; }
+  .cd-num { font-size:24px; margin-bottom:4px; }
+  .cd-lbl { font-size:8px; }
+  .thank-you-section { padding:50px 15px 80px; }
+  .ty-text { font-size:38px; margin-bottom:10px; }
+  .ty-sub { font-size:13px; line-height:1.65; }
+  .wf { padding:16px; }
+  .wf input, .wf textarea { padding:12px; font-size:14px; }
+  .wf-btn { padding:16px; cursor:pointer; }
 }
 
 .reveal{ opacity:0; transform:translateY(25px); transition:all 1s cubic-bezier(.22,1,.36,1); }
@@ -423,19 +403,20 @@ body.opened .app{ opacity:1; }
   <div class="envelope" id="envelope">
     <div class="env-back"></div>
     <div class="env-letter">
-      <img src="8.png" class="fl-png fl-env-tl mask-tl" alt="hoa">
-      <img src="8.png" class="fl-png fl-env-br mask-br" alt="hoa">
-      <div class="content-wrapper-env">
-        <div style="font-family: var(--ff-display); font-size: 14px; font-weight: 700; letter-spacing: 3px; color: var(--text-dark); margin-bottom: 10px; text-transform: uppercase;">
-          SAVE <span style="font-family: var(--ff-script); color: var(--gold); font-size: 24px; font-weight: 500; text-transform: lowercase; padding: 0 4px; letter-spacing: 0;">the</span> DATE
+      <!-- Hoa góc nhỏ, mask mạnh, z-index thấp -->
+      <img src="8.png" alt="" style="position:absolute;width:75px;top:-5px;left:-5px;z-index:1;opacity:.8;mix-blend-mode:multiply;pointer-events:none;-webkit-mask-image:radial-gradient(circle at top left,black 25%,transparent 65%);mask-image:radial-gradient(circle at top left,black 25%,transparent 65%);">
+      <img src="8.png" alt="" style="position:absolute;width:75px;bottom:-5px;right:-5px;z-index:1;opacity:.8;mix-blend-mode:multiply;pointer-events:none;transform:scaleX(-1) scaleY(-1);-webkit-mask-image:radial-gradient(circle at top left,black 25%,transparent 65%);mask-image:radial-gradient(circle at top left,black 25%,transparent 65%);">
+      <!-- Nội dung phong bì — z-index:10 -->
+      <div style="position:relative;z-index:10;text-align:center;width:100%;padding:6px 14px;">
+        <div style="font-family:var(--ff-display);font-size:11px;font-weight:700;letter-spacing:4px;color:var(--text-dark);text-transform:uppercase;white-space:nowrap;margin-bottom:8px;">
+          SAVE <span style="font-family:var(--ff-script);color:var(--gold);font-size:20px;font-weight:500;text-transform:lowercase;letter-spacing:0;padding:0 3px;vertical-align:middle;">the</span> DATE
         </div>
-        <!-- ÉP TÊN XUỐNG DÒNG CÂN ĐỐI TRONG PHONG BÌ KHÔNG LỆCH -->
-        <div style="font-family: var(--ff-script); font-size: 32px; color: var(--text-dark); font-weight: 500; display: flex; flex-direction: column; align-items: center; gap: 4px;">
-          <span>Tuấn Anh</span>
-          <span style="font-size: 15px; color: var(--gold); font-family: var(--ff-display); font-weight: 700;">&amp;</span>
-          <span>Thanh Huyền</span>
+        <div style="font-family:var(--ff-script);font-size:clamp(20px,5vw,28px);color:var(--text-dark);line-height:1.2;font-weight:500;">Tuấn Anh</div>
+        <div style="font-family:var(--ff-display);font-size:11px;color:var(--gold);font-weight:700;font-style:italic;margin:3px 0;">&amp;</div>
+        <div style="font-family:var(--ff-script);font-size:clamp(20px,5vw,28px);color:var(--text-dark);line-height:1.2;font-weight:500;">Thanh Huyền</div>
+        <div style="margin-top:10px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-main);font-weight:700;border-top:1px solid rgba(181,154,95,.25);padding-top:8px;white-space:nowrap;">
+          26 · 05 · 2026
         </div>
-        <div style="margin-top: 15px; font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--text-main); font-weight: 700; border-top: 1px solid rgba(181, 154, 95, 0.2); padding-top: 10px; display: inline-block;">26 · 05 · 2026</div>
       </div>
     </div>
     <div class="env-side left"></div>
@@ -470,27 +451,21 @@ body.opened .app{ opacity:1; }
       <img src="6.jpg" class="fl-jpeg mask-bl fl-hero-bl" alt="hoa">
       
       <div class="content-wrapper">
-        <div class="t-sub" style="margin-top: 25px;">The Wedding Of</div>
+        <div class="t-sub" style="margin-top:18px;">The Wedding Of</div>
         <div class="t-save-row">SAVE <span>the</span> DATE</div>
-        
-        <!-- Ép xuống dòng chuẩn chỉnh cho tên phụ -->
-        <div class="t-sub-small" style="letter-spacing: 1.5px; font-size: 12px; font-weight: 700; line-height: 1.6;">
-          LÊ TUẤN ANH <br>
-          <span class="amp-block">&amp;</span><br>
-          <span class="name-block">NGUYỄN T. THANH HUYỀN</span>
-        </div>
-        
+        <div class="t-sub-small" style="letter-spacing:1.5px;font-size:11px;font-weight:700;line-height:1.9;margin-bottom:0;">LÊ TUẤN ANH</div>
+        <div style="font-family:var(--ff-display);font-size:11px;color:var(--gold);font-style:italic;margin:1px 0;">&amp;</div>
+        <div class="t-sub-small" style="letter-spacing:1px;font-size:11px;font-weight:700;line-height:1.4;margin-bottom:12px;">NGUYỄN T. THANH HUYỀN</div>
         <div class="date-wrapper">
           <div class="solar-row">
-            <span class="month">THÁNG 05</span>
+            <span class="month">THG 05</span>
             <span class="day">26</span>
-            <span class="year">NĂM 2026</span>
+            <span class="year">2026</span>
           </div>
-          <div class="lunar-row">Ngày 10 tháng 4 năm Bính Ngọ</div>
+          <div class="lunar-row">✦ Ngày 10 tháng 4 năm Bính Ngọ ✦</div>
         </div>
-        
-        <div class="t-address" style="font-weight: 600;">
-          Mặt đường QL 18A, tổ 1, khu phố Yên Thanh 1,<br>phường Uông Bí, tỉnh Quảng Ninh
+        <div class="t-address" style="font-weight:600;font-size:11px;line-height:1.7;padding:0 8px;">
+          Mặt đường QL 18A, tổ 1,<br>khu phố Yên Thanh 1,<br>phường Uông Bí, tỉnh Quảng Ninh
         </div>
       </div>
     </div>
